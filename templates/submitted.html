@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block body %}<div class="card"><h2>Complaint registered</h2>
+<p>Tracking code: <b>{{c.ticket_id}}</b></p><p>User ID: <b>{{c.user_id}}</b></p>
+<p>Write the tracking code down now — it is the only way to check your status, and it is not stored anywhere you can look it up later.</p>
+<p><a href="/track">Check status</a></p></div>{% endblock %}

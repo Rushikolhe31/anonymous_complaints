@@ -1,0 +1,622 @@
+
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Anonymous Complaint Portal</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+            background: #f7f7f7;
+            color: #222;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            height: 64px;
+
+            background: rgba(255,255,255,0.96);
+
+            border-bottom: 1px solid #eeeeee;
+
+            backdrop-filter: blur(10px);
+        }
+
+
+        .nav-container {
+            max-width: 1100px;
+            height: 100%;
+            margin: auto;
+
+            padding: 0 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        /* Logo */
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            text-decoration: none;
+
+            color: #222;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            letter-spacing: -0.3px;
+        }
+
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #6c2bd9;
+
+            color: white;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+            box-shadow:
+                0 4px 10px rgba(108,43,217,0.18);
+        }
+
+
+        /* Navigation links */
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
+        .nav-links a {
+            text-decoration: none;
+
+            color: #555;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            padding: 9px 13px;
+
+            border-radius: 8px;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        .nav-links a:hover {
+            background: #f1eaff;
+            color: #6c2bd9;
+        }
+
+
+        .nav-links .admin-link {
+            color: #6c2bd9;
+        }
+
+
+        /* Mobile menu button */
+
+        .menu-button {
+            display: none;
+
+            border: none;
+
+            background: #f2ecff;
+
+            color: #6c2bd9;
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        main {
+            min-height: calc(100vh - 64px);
+        }
+
+
+        /* =========================
+           FLASH MESSAGES
+        ========================= */
+
+        .flash-container {
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 15px 20px 0;
+        }
+
+
+        .flash {
+            margin: 0 0 10px;
+
+            padding: 11px 14px;
+
+            background: #fff0f0;
+
+            border: 1px solid #ffd4d4;
+
+            color: #b42318;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           COMMON ELEMENTS
+        ========================= */
+
+        a {
+            color: #6c2bd9;
+        }
+
+
+        button {
+            font-family: inherit;
+        }
+
+
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+
+        .card {
+            background: #fff;
+
+            border: 1px solid #e8e8e8;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            margin: 12px 0;
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.035);
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .card:hover {
+            border-color: #ded1f5;
+
+            box-shadow:
+                0 5px 16px rgba(0,0,0,0.05);
+        }
+
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+
+            padding: 12px 13px;
+
+            margin: 6px 0 12px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            background: #fff;
+
+            color: #222;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #6c2bd9;
+
+            box-shadow:
+                0 0 0 3px rgba(108,43,217,0.08);
+        }
+
+
+        button {
+            padding: 11px 18px;
+
+            background: #6c2bd9;
+
+            color: #fff;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                background 0.2s ease,
+                transform 0.15s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        button:hover {
+            background: #5b20bd;
+
+            box-shadow:
+                0 4px 12px rgba(108,43,217,0.18);
+        }
+
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+
+        /* =========================
+           STATUS BADGES
+        ========================= */
+
+        .badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            background: #eeeeee;
+
+            color: #555;
+        }
+
+
+        .Resolved {
+            background: #e4f7ed;
+            color: #18794e;
+        }
+
+
+        .Pending {
+            background: #fff4d6;
+            color: #946200;
+        }
+
+
+        .In {
+            background: #eee8ff;
+            color: #6336c8;
+        }
+
+
+        .Rejected {
+            background: #fde8e8;
+            color: #b42318;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 25px 20px;
+
+            text-align: center;
+
+            color: #aaa;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                height: 60px;
+            }
+
+
+            .nav-container {
+                padding: 0 14px;
+            }
+
+
+            .brand {
+                font-size: 15px;
+            }
+
+
+            .brand-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+
+            .menu-button {
+                display: block;
+            }
+
+
+            .nav-links {
+                display: none;
+
+                position: absolute;
+
+                top: 60px;
+
+                left: 0;
+                right: 0;
+
+                padding: 10px 14px;
+
+                background: white;
+
+                border-bottom: 1px solid #eee;
+
+                box-shadow:
+                    0 5px 15px rgba(0,0,0,0.06);
+            }
+
+
+            .nav-links.active {
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .nav-links a {
+                padding: 12px;
+
+                border-radius: 8px;
+            }
+
+
+            main {
+                min-height: calc(100vh - 60px);
+            }
+
+
+            .flash-container {
+                padding: 12px 14px 0;
+            }
+
+
+            .card {
+                padding: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Navigation -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+
+            <a href="/" class="brand">
+
+                <span class="brand-icon">
+                    ✓
+                </span>
+
+                Anonymous Complaints
+
+            </a>
+
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+
+            <div class="nav-links" id="navLinks">
+
+                <a href="/">
+                    Submit
+                </a>
+
+                <a href="/track">
+                    Check Status
+                </a>
+
+                <a href="/admin" class="admin-link">
+                    Admin
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Flash messages -->
+
+    {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+
+            <div class="flash-container">
+
+                {% for m in messages %}
+
+                    <div class="flash">
+                        {{ m }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Main -->
+
+    <main>
+
+        {% block body %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        Anonymous Complaint Portal · Secure & Private
+
+    </div>
+
+
+    <!-- Mobile navigation -->
+
+    <script>
+
+        const menuButton =
+            document.getElementById("menuButton");
+
+        const navLinks =
+            document.getElementById("navLinks");
+
+
+        menuButton.addEventListener("click", function () {
+
+            navLinks.classList.toggle("active");
+
+        });
+
+
+        /* Close mobile menu after clicking */
+
+        document.querySelectorAll(".nav-links a")
+            .forEach(function(link) {
+
+                link.addEventListener("click", function() {
+
+                    navLinks.classList.remove("active");
+
+                });
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>
+```

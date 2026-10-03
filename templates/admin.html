@@ -1,0 +1,552 @@
+
+{% extends "base.html" %}
+
+{% block body %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f7f7f7;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #222;
+    }
+
+    .admin-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 30px 20px 60px;
+    }
+
+    /* Header */
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    .admin-title h1 {
+        margin: 0;
+        font-size: 27px;
+        color: #111;
+        letter-spacing: -0.5px;
+    }
+
+    .admin-title p {
+        margin: 6px 0 0;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .logout-btn {
+        text-decoration: none;
+        color: #6c2bd9;
+        background: #f0e9ff;
+        border: 1px solid #e1d3ff;
+        padding: 9px 15px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+        background: #6c2bd9;
+        color: white;
+    }
+
+    /* Statistics */
+
+    .stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        background: white;
+        border: 1px solid #e8e8e8;
+        border-radius: 10px;
+        padding: 12px 16px;
+        min-width: 120px;
+        box-shadow: 0 2px 7px rgba(0,0,0,0.03);
+    }
+
+    .stat-label {
+        display: block;
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 5px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    /* Filter */
+
+    .filter-card {
+        background: white;
+        border: 1px solid #e8e8e8;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+
+    .filter-form {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .filter-form select {
+        flex: 1;
+    }
+
+    select,
+    input {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 11px 12px;
+        background: white;
+        font-size: 13px;
+        color: #333;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    select:focus,
+    input:focus {
+        border-color: #6c2bd9;
+        box-shadow: 0 0 0 3px rgba(108,43,217,0.08);
+    }
+
+    .filter-btn {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 20px;
+        background: #6c2bd9;
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .filter-btn:hover {
+        background: #5b20bd;
+    }
+
+    /* Category */
+
+    .category-section {
+        margin-bottom: 28px;
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .category-header h2 {
+        font-size: 18px;
+        margin: 0;
+        color: #222;
+    }
+
+    .category-count {
+        color: #999;
+        font-size: 12px;
+        font-weight: normal;
+    }
+
+    /* Complaint card */
+
+    .complaint-card {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 10px;
+        transition: 0.2s;
+    }
+
+    .complaint-card:hover {
+        border-color: #d7c5f7;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transform: translateY(-1px);
+    }
+
+    .complaint-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .complaint-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #222;
+        margin: 0;
+    }
+
+    /* Status */
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .Pending {
+        background: #fff4d6;
+        color: #946200;
+    }
+
+    .Resolved {
+        background: #e4f7ed;
+        color: #18794e;
+    }
+
+    .Rejected {
+        background: #fde8e8;
+        color: #b42318;
+    }
+
+    .In {
+        background: #eee8ff;
+        color: #6336c8;
+    }
+
+    /* Complaint information */
+
+    .complaint-meta {
+        margin-top: 7px;
+        color: #999;
+        font-size: 11px;
+    }
+
+    .complaint-description {
+        color: #555;
+        font-size: 13px;
+        line-height: 1.55;
+        margin: 12px 0 15px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Update form */
+
+    .update-form {
+        display: flex;
+        gap: 8px;
+    }
+
+    .update-form select {
+        width: 145px;
+    }
+
+    .update-form input {
+        flex: 1;
+    }
+
+    .update-btn {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 18px;
+        background: #6c2bd9;
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .update-btn:hover {
+        background: #5b20bd;
+    }
+
+    /* Empty */
+
+    .empty {
+        background: white;
+        border: 1px solid #e8e8e8;
+        border-radius: 12px;
+        padding: 35px;
+        text-align: center;
+        color: #999;
+        font-size: 14px;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 700px) {
+
+        .admin-wrapper {
+            padding: 22px 14px 45px;
+        }
+
+        .admin-header {
+            align-items: flex-start;
+        }
+
+        .admin-title h1 {
+            font-size: 23px;
+        }
+
+        .filter-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-form select,
+        .filter-btn {
+            width: 100%;
+        }
+
+        .complaint-top {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .update-form {
+            flex-direction: column;
+        }
+
+        .update-form select,
+        .update-form input,
+        .update-btn {
+            width: 100%;
+        }
+
+        .stat {
+            flex: 1;
+        }
+    }
+</style>
+
+
+<div class="admin-wrapper">
+
+    <!-- Header -->
+
+    <div class="admin-header">
+
+        <div class="admin-title">
+
+            <h1>Manage Complaints</h1>
+
+            <p>Review, filter and manage submitted complaints</p>
+
+        </div>
+
+        <a href="/admin/logout" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="stats">
+
+        {% for s,n in counts.items() %}
+
+            <div class="stat">
+
+                <span class="stat-label">
+                    {{ s }}
+                </span>
+
+                <span class="stat-number">
+                    {{ n }}
+                </span>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- Filters -->
+
+    <div class="filter-card">
+
+        <form class="filter-form">
+
+            <select name="category">
+
+                <option value="">
+                    All categories
+                </option>
+
+                {% for c in categories %}
+
+                    <option
+                        value="{{ c }}"
+                        {{ 'selected' if c == cat }}
+                    >
+                        {{ c }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <select name="status">
+
+                <option value="">
+                    All statuses
+                </option>
+
+                {% for s in statuses %}
+
+                    <option
+                        value="{{ s }}"
+                        {{ 'selected' if s == st }}
+                    >
+                        {{ s }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button class="filter-btn" type="submit">
+                Filter
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Complaints -->
+
+    {% for category, items in grouped.items() %}
+
+        <div class="category-section">
+
+            <div class="category-header">
+
+                <h2>
+                    {{ category }}
+                    <span class="category-count">
+                        {{ items|length }} complaint{% if items|length != 1 %}s{% endif %}
+                    </span>
+                </h2>
+
+            </div>
+
+
+            {% for c in items %}
+
+                <div class="complaint-card">
+
+                    <div class="complaint-top">
+
+                        <p class="complaint-title">
+                            {{ c.title }}
+                        </p>
+
+                        <span class="status {{ c.status.split()[0] }}">
+                            {{ c.status }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="complaint-meta">
+
+                        Ticket {{ c.ticket_id }}
+                        &nbsp;·&nbsp;
+                        User {{ c.user_id }}
+                        &nbsp;·&nbsp;
+                        {{ c.created_at.strftime('%Y-%m-%d %H:%M') }}
+
+                    </div>
+
+
+                    <div class="complaint-description">
+
+                        {{ c.description }}
+
+                    </div>
+
+
+                    <!-- Update -->
+
+                    <form
+                        method="post"
+                        action="/admin/update/{{ c.id }}"
+                        class="update-form"
+                    >
+
+                        <select name="status">
+
+                            {% for s in statuses %}
+
+                                <option
+                                    value="{{ s }}"
+                                    {{ 'selected' if s == c.status }}
+                                >
+                                    {{ s }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <input
+                            name="admin_note"
+                            value="{{ c.admin_note }}"
+                            placeholder="Add response note..."
+                        >
+
+
+                        <button
+                            type="submit"
+                            class="update-btn"
+                        >
+                            Update
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+            No complaints found.
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+```

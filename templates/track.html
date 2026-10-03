@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block body %}<h1>Check Complaint Status</h1>
+<p>Enter the tracking code you received when you filed your complaint. Nothing else is needed, and your code is never shown in the web address.</p>
+<form method="post" class="card" autocomplete="off">
+<input type="hidden" name="csrf" value="{{ csrf_token() }}">
+<label>Tracking code</label>
+<input name="code" required maxlength="14" spellcheck="false" placeholder="e.g. 9F3A1C7B0D" autocomplete="off">
+<button>Check status</button>
+<p style="font-size:12px;color:#666;margin:0">For your safety, only {{ tries_left }} checks are allowed every 10 minutes.</p>
+</form>
+{% if error %}<p class="flash">{{ error }}</p>{% endif %}
+{% if result %}<div class="card"><b>{{ result.title }}</b>
+<span class="badge {{ result.status.split()[0] }}">{{ result.status }}</span>
+<p>{{ result.category }} · Filed {{ result.created_at.strftime('%Y-%m-%d') }} · Last updated {{ result.updated_at.strftime('%Y-%m-%d') }}</p>
+<p>{{ result.description }}</p>
+{% if result.admin_note %}<p><i>Official response: {{ result.admin_note }}</i></p>{% endif %}</div>
+{% endif %}{% endblock %}

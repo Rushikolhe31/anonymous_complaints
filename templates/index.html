@@ -1,0 +1,405 @@
+
+{% extends "base.html" %}
+
+{% block body %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f7f7f7;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #222;
+    }
+
+    .complaint-wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 35px 20px 60px;
+    }
+
+    /* Header */
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        margin: 0 0 8px;
+        font-weight: 700;
+        color: #111;
+        letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #777;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Privacy message */
+    .privacy-note {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f2eaff;
+        border: 1px solid #e4d5ff;
+        color: #5d22b8;
+        padding: 13px 15px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .privacy-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #6c2bd9;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    /* Main card */
+    .form-card {
+        background: white;
+        border-radius: 14px;
+        padding: 25px;
+        border: 1px solid #e9e9e9;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group:last-of-type {
+        margin-bottom: 24px;
+    }
+
+    label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #292929;
+    }
+
+    .optional {
+        color: #999;
+        font-size: 12px;
+        font-weight: 400;
+        margin-left: 4px;
+    }
+
+    .required {
+        color: #e53935;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 9px;
+        padding: 13px 14px;
+        font-size: 14px;
+        color: #222;
+        outline: none;
+        transition: border-color 0.2s ease,
+                    box-shadow 0.2s ease,
+                    background 0.2s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #aaa;
+    }
+
+    input:hover,
+    select:hover,
+    textarea:hover {
+        border-color: #bbb;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #6c2bd9;
+        box-shadow: 0 0 0 3px rgba(108,43,217,0.08);
+        background: #fff;
+    }
+
+    select {
+        cursor: pointer;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 130px;
+        line-height: 1.5;
+    }
+
+    .help-text {
+        font-size: 12px;
+        color: #999;
+        margin-top: 7px;
+    }
+
+    /* Character count */
+    .description-bottom {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6px;
+        font-size: 11px;
+        color: #999;
+    }
+
+    /* Submit */
+    .submit-btn {
+        width: 100%;
+        border: none;
+        border-radius: 9px;
+        padding: 14px;
+        background: #6c2bd9;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.15s ease,
+                    background 0.2s ease,
+                    box-shadow 0.2s ease;
+    }
+
+    .submit-btn:hover {
+        background: #5b20bd;
+        box-shadow: 0 5px 15px rgba(108,43,217,0.18);
+    }
+
+    .submit-btn:active {
+        transform: scale(0.98);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+    }
+
+    /* Bottom information */
+    .bottom-info {
+        text-align: center;
+        color: #999;
+        font-size: 12px;
+        margin-top: 18px;
+        line-height: 1.5;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+
+        .complaint-wrapper {
+            padding: 25px 14px 45px;
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+        }
+
+        .form-card {
+            padding: 20px;
+            border-radius: 12px;
+        }
+    }
+</style>
+
+
+<div class="complaint-wrapper">
+
+    <!-- Header -->
+    <div class="page-header">
+
+        <h1>Register a Complaint</h1>
+
+        <p>
+            Tell us what happened. Your complaint can be submitted anonymously.
+        </p>
+
+    </div>
+
+
+    <!-- Privacy -->
+    <div class="privacy-note">
+
+        <div class="privacy-icon">
+            ✓
+        </div>
+
+        <div>
+            <strong>Your privacy is protected.</strong><br>
+            No name or email is required to submit a complaint.
+        </div>
+
+    </div>
+
+
+    <!-- Form -->
+    <form method="post" class="form-card">
+
+        <input
+            type="hidden"
+            name="csrf"
+            value="{{ csrf_token() }}"
+        >
+
+
+        <!-- User ID -->
+        <div class="form-group">
+
+            <label>
+                User ID
+                <span class="optional">(optional)</span>
+            </label>
+
+            <input
+                type="text"
+                name="user_id"
+                maxlength="64"
+                placeholder="Enter an alias to track your complaints"
+            >
+
+            <div class="help-text">
+                You can use any nickname instead of your real identity.
+            </div>
+
+        </div>
+
+
+        <!-- Category -->
+        <div class="form-group">
+
+            <label>
+                Category
+                <span class="required">*</span>
+            </label>
+
+            <select name="category" required>
+
+                <option value="" disabled selected>
+                    Select complaint category
+                </option>
+
+                {% for c in categories %}
+                    <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- Title -->
+        <div class="form-group">
+
+            <label>
+                Complaint title
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="text"
+                name="title"
+                maxlength="200"
+                required
+                placeholder="Briefly describe your complaint"
+            >
+
+        </div>
+
+
+        <!-- Description -->
+        <div class="form-group">
+
+            <label>
+                Description
+                <span class="required">*</span>
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="6"
+                maxlength="1000"
+                required
+                placeholder="Provide details about the issue..."
+            ></textarea>
+
+            <div class="description-bottom">
+
+                <span>
+                    Please provide clear and accurate information.
+                </span>
+
+                <span>
+                    <span id="count">0</span>/1000
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Submit -->
+        <button
+            type="submit"
+            class="submit-btn"
+            id="submitBtn"
+        >
+            Submit Complaint
+        </button>
+
+    </form>
+
+
+    <div class="bottom-info">
+        Your complaint will be recorded securely and handled by the appropriate administrator.
+    </div>
+
+</div>
+
+
+<script>
+
+    /* Character counter */
+
+    const description = document.getElementById("description");
+    const count = document.getElementById("count");
+
+    description.addEventListener("input", function () {
+        count.textContent = this.value.length;
+    });
+
+
+    /* Submit animation */
+
+    const form = document.querySelector(".form-card");
+    const submitBtn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", function () {
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+    });
+
+</script>
+
+{% endblock %}
+```
